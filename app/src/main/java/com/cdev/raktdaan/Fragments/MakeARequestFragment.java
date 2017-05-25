@@ -290,8 +290,4 @@ public class MakeARequestFragment extends Fragment {
         d.show();
     }
 
-//    public void onMakeRequest(View view){
-//        Log.d();
-//    }
-
 }
