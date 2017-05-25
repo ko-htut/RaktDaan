@@ -69,28 +69,9 @@ public class LoginDetailActivity extends AppCompatActivity {
             }
         });
 
-        bloodGroups = getResources().getStringArray(R.array.blood_group);
-        rhFactor = getResources().getStringArray(R.array.RH_factor);
-        genders = getResources().getStringArray(R.array.gender);
-        spinnerBloodGroup = (Spinner) findViewById(R.id.spinnerBloodGroup);
-        spinnerRhFactor = (Spinner) findViewById(R.id.spinnerRhFactor);
-        spinnerGender = (Spinner) findViewById(R.id.spinnerGender);
         etDOB = (EditText) findViewById(R.id.etDOB);
         etMobileNumber = (EditText) findViewById(R.id.etMobileNumber);
         etAddress = (EditText) findViewById(R.id.etAddress);
-
-        ArrayAdapter<String> spinnerAdapterBloodGroup = new ArrayAdapter<String>(LoginDetailActivity.this, android.R.layout.simple_spinner_dropdown_item, bloodGroups);
-        spinnerAdapterBloodGroup.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerBloodGroup.setAdapter(spinnerAdapterBloodGroup);
-
-
-        ArrayAdapter<String> spinnerAdapterRhFactor = new ArrayAdapter<String>(LoginDetailActivity.this, android.R.layout.simple_spinner_dropdown_item, rhFactor);
-        spinnerAdapterBloodGroup.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerRhFactor.setAdapter(spinnerAdapterRhFactor);
-
-        ArrayAdapter<String> spinnerAdapterGender = new ArrayAdapter<String>(LoginDetailActivity.this, android.R.layout.simple_spinner_dropdown_item, genders);
-        spinnerAdapterBloodGroup.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinnerGender.setAdapter(spinnerAdapterGender);
 
     }
 
