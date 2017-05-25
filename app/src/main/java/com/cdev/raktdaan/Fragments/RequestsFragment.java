@@ -2,7 +2,6 @@ package com.cdev.raktdaan.Fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +24,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-
-import static com.facebook.GraphRequest.TAG;
 
 
 public class RequestsFragment extends Fragment {
@@ -68,15 +65,40 @@ public class RequestsFragment extends Fragment {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for(DataSnapshot user: dataSnapshot.getChildren())
                     myDetail = user.getValue(UserDetail.class);
-                Log.d(TAG, "onDataChange: "+myDetail.getMobileNumber()+
-                " "+myDetail.getBloodGroup()+" "+myDetail.getDateOfBirth()+" "+myDetail.getGender()
-                +" "+myDetail.getLocalAddress());
+                mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot user:dataSnapshot.getChildren()) {
+                            for(DataSnapshot child:user.getChildren()) {
+                                if(child.getValue(RequestDetail.class).getBloodGroup().equals(myDetail.getBloodGroup()))
+                                    allRequestAdapter.add(child.getValue(RequestDetail.class));
+                                backupList.add(child.getValue(RequestDetail.class));
+                            }
+                        }
+                        if(arr.size()==0){
+                            mProgressBar.setVisibility(View.GONE);
+                            noPendingRequests.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            layoutGayab.setVisibility(View.GONE);
+                            listView.setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
             }
+
+
         });
 
         mProgressBar = (ProgressBar) view.findViewById(R.id.progress_barRequests);
@@ -92,32 +114,7 @@ public class RequestsFragment extends Fragment {
         arr = new ArrayList<RequestDetail>();
         allRequestAdapter = new AllRequestAdapter(getContext(), R.layout.requests_card, arr);
 
-        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot user:dataSnapshot.getChildren()) {
-                    for(DataSnapshot child:user.getChildren()) {
-                        allRequestAdapter.add(child.getValue(RequestDetail.class));
-                        if(child.getValue(RequestDetail.class).getBloodGroup().equals(myDetail.getBloodGroup()))
-                            backupList.add(child.getValue(RequestDetail.class));
-                    }
-                }
-                Log.d(TAG, "onDataChange: size is "+backupList.size()+" "+ arr.size()+" "+myDetail.getBloodGroup());
-                if(arr.size()==0){
-                    mProgressBar.setVisibility(View.GONE);
-                    noPendingRequests.setVisibility(View.VISIBLE);
-                }
-                else{
-                    layoutGayab.setVisibility(View.GONE);
-                    listView.setVisibility(View.VISIBLE);
-                }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
 
 
         listView.setAdapter(allRequestAdapter);
@@ -127,9 +124,11 @@ public class RequestsFragment extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-
+                    allRequestAdapter = new AllRequestAdapter(getContext(),R.layout.requests_card,backupList);
+                    listView.setAdapter(allRequestAdapter);
                 } else {
-
+                    allRequestAdapter = new AllRequestAdapter(getContext(), R.layout.requests_card, arr);
+                    listView.setAdapter(allRequestAdapter);
                 }
             }
         });
