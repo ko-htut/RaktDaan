@@ -2,7 +2,9 @@ package com.cdev.raktdaan.Fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
 import android.support.v4.app.Fragment;
@@ -211,6 +213,7 @@ public class MakeARequestFragment extends Fragment {
         final String[] bgArr = new String[]{"A", "B", "O", "AB"};
         np.setDisplayedValues(bgArr);
         np.setWrapSelectorWheel(false);
+
         final NumberPicker np2 = (NumberPicker) view.findViewById(R.id.numberPicker2);
         np2.setMaxValue(1);
         np2.setMinValue(0);
@@ -290,6 +293,7 @@ public class MakeARequestFragment extends Fragment {
         final String[] buArr = new String[]{"24 Hours", "48 Hours", "7 days   "};
         np.setDisplayedValues(buArr);
         np.setWrapSelectorWheel(false);
+
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
