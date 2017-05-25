@@ -69,8 +69,11 @@ public class MyRequestsFragment extends Fragment {
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for(DataSnapshot user:dataSnapshot.getChildren())
-                    myRequestAdapter.add(user.getValue(RequestDetail.class));
+                for(DataSnapshot user:dataSnapshot.getChildren()) {
+                    for(DataSnapshot next:user.getChildren())
+                        myRequestAdapter.add(next.getValue(RequestDetail.class));
+
+                }
                 if(list.size()==0){
                     myRequestProgressBar.setVisibility(View.GONE);
                     noRequestFound.setVisibility(View.VISIBLE);

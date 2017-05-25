@@ -1,10 +1,12 @@
 package com.cdev.raktdaan.Fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.ProgressBar;
@@ -12,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.cdev.raktdaan.AcceptRequestActivity;
 import com.cdev.raktdaan.R;
 import com.cdev.raktdaan.nonactivity.AllRequestAdapter;
 import com.cdev.raktdaan.nonactivity.RequestDetail;
@@ -47,7 +50,7 @@ public class RequestsFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_requests, container, false);
@@ -70,9 +73,11 @@ public class RequestsFragment extends Fragment {
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         for(DataSnapshot user:dataSnapshot.getChildren()) {
                             for(DataSnapshot child:user.getChildren()) {
-                                if(child.getValue(RequestDetail.class).getBloodGroup().equals(myDetail.getBloodGroup()))
-                                    allRequestAdapter.add(child.getValue(RequestDetail.class));
-                                backupList.add(child.getValue(RequestDetail.class));
+                                for(DataSnapshot next:child.getChildren()) {
+                                    if (next.getValue(RequestDetail.class).getBloodGroup().equals(myDetail.getBloodGroup()))
+                                        allRequestAdapter.add(next.getValue(RequestDetail.class));
+                                    backupList.add(next.getValue(RequestDetail.class));
+                                }
                             }
                         }
                         if(arr.size()==0){
@@ -119,6 +124,25 @@ public class RequestsFragment extends Fragment {
 
         listView.setAdapter(allRequestAdapter);
 
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                RequestDetail toSend = (RequestDetail) listView.getItemAtPosition(position);
+                Intent intent = new Intent(getContext(), AcceptRequestActivity.class);
+                intent.putExtra("name",toSend.getName());
+                intent.putExtra("age",toSend.getAge());
+                intent.putExtra("bg",toSend.getBloodGroup());
+                intent.putExtra("bu",toSend.getBloodUnits());
+                intent.putExtra("gender",toSend.getGender());
+                intent.putExtra("time",toSend.getTime());
+                intent.putExtra("email",toSend.getEmail());
+                intent.putExtra("key",toSend.getKey());
+                intent.putExtra("accepted",toSend.getAccepted());
+                intent.putExtra("urgency",toSend.getUrgency());
+                startActivity(intent);
+            }
+        });
 
         requestsSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override

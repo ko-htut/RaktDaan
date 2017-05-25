@@ -43,6 +43,7 @@ public class MakeARequestFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private boolean nameNotEmpty,ageNotEmpty;
+    private String emailUser;
 
     private String radioText= "Male";
 
@@ -166,15 +167,19 @@ public class MakeARequestFragment extends Fragment {
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                emailUser = mFirebaseAuth.getCurrentUser().getEmail().replace(".","");
                 SimpleDateFormat sdf = new SimpleDateFormat("MMM dd, yyyy HH:mm");
                 Date resultdate = new Date(1000*secondsToAdd(bloodUrgency.getText().toString())+System.currentTimeMillis());
+
+                String keyTo = mDatabaseReference.child("Requests").child(emailUser).push().getKey();
+
                 RequestDetail dataToSend = new RequestDetail(name.getText().toString().trim(),
                         age.getText().toString().trim(),radioText,bloodGroup.getText().toString(),
                         bloodUnit.getText().toString(),bloodUrgency.getText().toString(),
-                        sdf.format(resultdate));
+                        sdf.format(resultdate),emailUser,keyTo,"");
 
-                String emailUser = mFirebaseAuth.getCurrentUser().getEmail().replace(".","");
-                mDatabaseReference.child("Requests").child(emailUser).push().setValue(dataToSend);
+                mDatabaseReference.child("Requests").child(emailUser).child(keyTo).push().setValue(dataToSend);
+
                 MyRequestsFragment myRequestsFragment = new MyRequestsFragment();
                 FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.container_for_fragments,myRequestsFragment).commit();

@@ -12,11 +12,15 @@ public class RequestDetail {
     private String bloodUnits;
     private String urgency;
     private String time;
+    private String email;
+    private String key;
+    private String accepted;
 
     public RequestDetail() {
     }
 
-    public RequestDetail(String name, String age,String gender, String bloodGroup, String bloodUnits, String urgency,String time) {
+
+    public RequestDetail(String name, String age, String gender, String bloodGroup, String bloodUnits, String urgency, String time, String email, String key,String accepted) {
         this.name = name;
         this.age = age;
         this.bloodGroup = bloodGroup;
@@ -24,6 +28,9 @@ public class RequestDetail {
         this.urgency = urgency;
         this.gender = gender;
         this.time = time;
+        this.email = email;
+        this.key = key;
+        this.accepted = accepted;
     }
 
     public String getTime() {
@@ -53,5 +60,17 @@ public class RequestDetail {
 
     public String getUrgency() {
         return urgency;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public String getAccepted() {
+        return accepted;
     }
 }
