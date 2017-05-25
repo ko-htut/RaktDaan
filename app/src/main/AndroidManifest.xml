@@ -24,8 +24,11 @@
             android:name=".HomeActivity"
             android:label="@string/title_activity_home"
             android:theme="@style/AppTheme" />
-
-        <activity android:name=".AcceptRequestActivity"></activity>
+        <activity android:name=".AcceptRequestActivity" />
+        <activity
+            android:name=".DonorsToMyRequestActivity"
+            android:label="@string/title_activity_donors_to_my_request"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

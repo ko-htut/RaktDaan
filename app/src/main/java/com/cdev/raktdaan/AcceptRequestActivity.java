@@ -1,8 +1,11 @@
 package com.cdev.raktdaan;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -18,7 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class AcceptRequestActivity extends AppCompatActivity {
+public class AcceptRequestActivity extends AppCompatActivity{
 
     private RequestDetail userToAccept;
     private Intent intent;
@@ -75,7 +78,7 @@ public class AcceptRequestActivity extends AppCompatActivity {
         databaseReference = mFirebaseDatabase.getReference().child("Requests").
                 child(userToAccept.getEmail()).child(userToAccept.getKey());
 
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot data : dataSnapshot.getChildren()) {
@@ -120,9 +123,37 @@ public class AcceptRequestActivity extends AppCompatActivity {
         buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                userToAccept.getAccepted().add(new ArrayListDetail(myEmail,myName,myDetail.getMobileNumber()));
-                databaseReference.child(childOfChild).setValue(userToAccept);
-                finish();
+                AlertDialog.Builder builder;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    builder = new AlertDialog.Builder(AcceptRequestActivity.this, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
+                } else {
+                    builder = new AlertDialog.Builder(AcceptRequestActivity.this);
+                }
+                builder.setTitle("Accept Request")
+                        .setMessage("Are you sure you want to accept this request?")
+                        .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                userToAccept.getAccepted().add(new ArrayListDetail(myEmail,myName,myDetail.getMobileNumber()));
+                                databaseReference.child(childOfChild).setValue(userToAccept);
+                                buttonAccept.setEnabled(false);
+                                buttonAccept.setBackgroundColor(Color.parseColor("#546E7A"));
+                                buttonAccept.setText("REQUEST ALREADY ACCEPTED");
+                                dialog.dismiss();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        })
+                        .setIcon(android.R.drawable.ic_menu_delete)
+                        .show();
+
+
+
+
+
+
             }
         });
     }

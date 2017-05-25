@@ -7,8 +7,6 @@
         android:id="@+id/myRequestListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="9dp"
-        android:paddingRight="9dp"
         android:visibility="gone"
         tools:context="com.cdev.raktdaan.Fragments.MyRequestsFragment">
 

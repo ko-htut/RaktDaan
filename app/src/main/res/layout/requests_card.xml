@@ -40,12 +40,29 @@
                     android:textSize="20sp"
                     android:textStyle="bold" />
 
-                <TextView
-                    android:id="@+id/tvRC_age"
-                    android:textSize="13sp"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Age : " />
+                    android:orientation="horizontal"
+                    android:weightSum="1">
+
+                    <TextView
+                        android:id="@+id/tvRC_age"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Age : "
+                        android:textSize="13sp"
+                        android:layout_weight="0.92" />
+
+                    <TextView
+                        android:id="@+id/tvRC_accepted"
+                        android:visibility="gone"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#1B5E20"
+                        android:text="Accepted"
+                        android:textSize="13sp"  />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvRC_validTill"

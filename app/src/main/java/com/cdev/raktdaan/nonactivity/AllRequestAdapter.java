@@ -10,7 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.cdev.raktdaan.Fragments.ArrayListDetail;
 import com.cdev.raktdaan.R;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
 
@@ -20,8 +22,11 @@ import java.util.ArrayList;
 
 public class AllRequestAdapter extends ArrayAdapter<RequestDetail> {
 
+    private String myEmail;
+
     public AllRequestAdapter(@NonNull Context context, @LayoutRes int resource, ArrayList<RequestDetail> objects) {
         super(context, resource, objects);
+        myEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".","");
     }
 
     @NonNull
@@ -34,12 +39,24 @@ public class AllRequestAdapter extends ArrayAdapter<RequestDetail> {
         TextView name = (TextView)convertView.findViewById(R.id.tvRC_name);
         TextView time = (TextView)convertView.findViewById(R.id.tvRC_validTill);
         TextView age = (TextView)convertView.findViewById(R.id.tvRC_age);
+        TextView accepted = (TextView) convertView.findViewById(R.id.tvRC_accepted);
 
         RequestDetail detail = getItem(position);
         bloodGroup.setText(detail.getBloodGroup());
         name.setText(detail.getName());
         time.setText("Valid Till : "+detail.getTime());
         age.setText("Age : "+detail.getAge());
+
+        boolean foundAccepted = false;
+
+        for(ArrayListDetail arrayListDetail:detail.getAccepted()){
+            if(arrayListDetail.getEmail().equals(myEmail)){
+                foundAccepted = true;
+                accepted.setVisibility(View.VISIBLE);
+                break;
+            }
+        }
+
         return convertView;
 
     }

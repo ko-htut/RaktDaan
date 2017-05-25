@@ -44,6 +44,7 @@ public class RequestsFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private DatabaseReference getmDatabaseReference2;
+    private Switch requestsSwitch;
 
 
     public RequestsFragment() {
@@ -115,7 +116,7 @@ public class RequestsFragment extends Fragment {
 
         LayoutInflater myinflater = getActivity().getLayoutInflater();
         ViewGroup myHeader = (ViewGroup)myinflater.inflate(R.layout.listview_header, listView, false);
-        Switch requestsSwitch = (Switch) myHeader.findViewById(R.id.requestsSwitch);
+        requestsSwitch = (Switch) myHeader.findViewById(R.id.requestsSwitch);
 
         listView.addHeaderView(myHeader, null, false);
         arr = new ArrayList<RequestDetail>();
