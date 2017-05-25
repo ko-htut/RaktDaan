@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "458921220636",
+    "firebase_url": "https://rakt-daan-9107d.firebaseio.com",
+    "project_id": "rakt-daan-9107d",
+    "storage_bucket": "rakt-daan-9107d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458921220636:android:860deb3fe8775078",
+        "android_client_info": {
+          "package_name": "com.cdev.raktdaan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "458921220636-5k3ld2iolhe3s0c8tgv9sd921isns251.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.cdev.raktdaan",
+            "certificate_hash": "ae219a0cbbb42887c4b27a40b1f155ff616fc017"
+          }
+        },
+        {
+          "client_id": "458921220636-gojjmv2eh7m3pkjvisc3jr760aj6qi62.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB8UUNvxhwr0d-Vj4me0964Fq2QdkMsWe4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "458921220636-gojjmv2eh7m3pkjvisc3jr760aj6qi62.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
