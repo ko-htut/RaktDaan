@@ -36,7 +36,7 @@
                 android:textSize="20sp" />
 
             <TextView
-                android:id="@+id/textview_bloodGroup"
+                android:id="@+id/textView_bloodGroup"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1.51"
@@ -60,7 +60,7 @@
                 android:textSize="20sp" />
 
             <RadioGroup
-                android:id="@+id/rd_pt_sex"
+                android:id="@+id/radioGroup_gender"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.11"
@@ -70,14 +70,14 @@
                 android:paddingTop="16dp">
 
                 <RadioButton
-                    android:id="@+id/rb1"
+                    android:id="@+id/radioButton_male"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="true"
                     android:text="Male" />
 
                 <RadioButton
-                    android:id="@+id/rb2"
+                    android:id="@+id/radioButton_female"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="16dp"
@@ -120,9 +120,9 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="30dp"
             android:background="@color/buttonBackGround"
+            android:onClick="onProceed"
             android:text="Proceed"
-            android:textColor="@android:color/white"
-            android:onClick="onProceed"/>
+            android:textColor="@android:color/white" />
 
     </LinearLayout>
 
