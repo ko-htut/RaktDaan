@@ -190,7 +190,7 @@ public class MakeARequestFragment extends Fragment {
 
     public void showBloodGroup() {
 
-        final Dialog d = new Dialog(getContext());
+        final Dialog d = new Dialog(getContext(), R.style.Dialog);
         d.setTitle("Blood Group");
         d.setContentView(R.layout.blood_group_dialog);
         TextView b1 = (TextView) d.findViewById(R.id.button1);
@@ -227,7 +227,7 @@ public class MakeARequestFragment extends Fragment {
 
     public void showBloodUnit() {
 
-        final Dialog d = new Dialog(getContext());
+        final Dialog d = new Dialog(getContext(), R.style.Dialog);
         d.setTitle("Blood Units");
         d.setContentView(R.layout.blood_units_dialog);
         TextView b1 = (TextView) d.findViewById(R.id.button1);
@@ -263,7 +263,7 @@ public class MakeARequestFragment extends Fragment {
 
     public void showBloodUrgency() {
 
-        final Dialog d = new Dialog(getContext());
+        final Dialog d = new Dialog(getContext(), R.style.Dialog);
         d.setTitle("Blood Urgency");
         d.setContentView(R.layout.blood_urgency_dialog);
         TextView b1 = (TextView) d.findViewById(R.id.button1);
