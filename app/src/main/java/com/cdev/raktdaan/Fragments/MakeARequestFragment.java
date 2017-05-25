@@ -233,7 +233,7 @@ public class MakeARequestFragment extends Fragment {
         TextView b1 = (TextView) d.findViewById(R.id.button1);
         TextView b2 = (TextView) d.findViewById(R.id.button2);
         final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker3);
-        np.setMaxValue(5);
+        np.setMaxValue(3);
         np.setMinValue(1);
         np.setWrapSelectorWheel(false);
         b1.setOnClickListener(new View.OnClickListener() {
