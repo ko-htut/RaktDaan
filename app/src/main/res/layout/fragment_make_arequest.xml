@@ -166,9 +166,9 @@
             android:id="@+id/tv_pt_urgency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="0.60"
+            android:layout_weight="0.48"
             android:padding="16dp"
-            android:text="24 Hour"
+            android:text="24 Hours"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>

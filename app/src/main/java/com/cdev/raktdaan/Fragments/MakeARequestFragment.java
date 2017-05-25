@@ -1,5 +1,6 @@
 package com.cdev.raktdaan.Fragments;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -195,19 +196,22 @@ public class MakeARequestFragment extends Fragment {
 
     public void showBloodGroup() {
 
-        final Dialog d = new Dialog(getContext());
-        d.setTitle("Blood Group");
-        d.setContentView(R.layout.blood_group_dialog);
-        TextView b1 = (TextView) d.findViewById(R.id.button1);
-        TextView b2 = (TextView) d.findViewById(R.id.button2);
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.blood_group_dialog, null);
+        builder.setView(view);
+        builder.setTitle("Blood Group");
+        final android.support.v7.app.AlertDialog dialog = builder.create();
 
-        final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker1);
+        TextView b1 = (TextView) view.findViewById(R.id.button1);
+        TextView b2 = (TextView) view.findViewById(R.id.button2);
+
+        final NumberPicker np = (NumberPicker) view.findViewById(R.id.numberPicker1);
         np.setMinValue(0);
         np.setMaxValue(3);
         final String[] bgArr = new String[]{"A", "B", "O", "AB"};
         np.setDisplayedValues(bgArr);
         np.setWrapSelectorWheel(false);
-        final NumberPicker np2 = (NumberPicker) d.findViewById(R.id.numberPicker2);
+        final NumberPicker np2 = (NumberPicker) view.findViewById(R.id.numberPicker2);
         np2.setMaxValue(1);
         np2.setMinValue(0);
         final String[] rfArr = new String[]{"+", "-"};
@@ -218,43 +222,47 @@ public class MakeARequestFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 bloodGroup.setText(bgArr[np.getValue()] + rfArr[np2.getValue()]);
-                d.dismiss();
+                dialog.dismiss();
             }
         });
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                d.dismiss();
+                dialog.dismiss();
             }
         });
-        d.show();
+        dialog.show();
     }
 
     public void showBloodUnit() {
 
-        final Dialog d = new Dialog(getContext());
-        d.setTitle("Blood Units");
-        d.setContentView(R.layout.blood_units_dialog);
-        TextView b1 = (TextView) d.findViewById(R.id.button1);
-        TextView b2 = (TextView) d.findViewById(R.id.button2);
-        final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker3);
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.blood_units_dialog, null);
+        builder.setView(view);
+        builder.setTitle("Blood Units");
+        final android.support.v7.app.AlertDialog dialog = builder.create();
+
+        final NumberPicker np = (NumberPicker) view.findViewById(R.id.numberPicker3);
         np.setMaxValue(3);
         np.setMinValue(1);
         np.setWrapSelectorWheel(false);
+
+        TextView b1 = (TextView) view.findViewById(R.id.button1);
+        TextView b2 = (TextView) view.findViewById(R.id.button2);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bloodUnit.setText(String.valueOf(np.getValue()));
-                d.dismiss();
+                dialog.dismiss();
             }
         });
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                d.dismiss();
+                dialog.dismiss();
             }
         });
-        d.show();
+        dialog.show();
     }
 
     public long secondsToAdd(String s){
@@ -268,31 +276,34 @@ public class MakeARequestFragment extends Fragment {
 
     public void showBloodUrgency() {
 
-        final Dialog d = new Dialog(getContext());
-        d.setTitle("Blood Urgency");
-        d.setContentView(R.layout.blood_urgency_dialog);
-        TextView b1 = (TextView) d.findViewById(R.id.button1);
-        TextView b2 = (TextView) d.findViewById(R.id.button2);
-        final NumberPicker np = (NumberPicker) d.findViewById(R.id.numberPicker4);
+        android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(getActivity());
+        View view = LayoutInflater.from(getContext()).inflate(R.layout.blood_urgency_dialog, null);
+        builder.setView(view);
+        builder.setTitle("Blood Urgency");
+        final android.support.v7.app.AlertDialog dialog = builder.create();
+
+        TextView b1 = (TextView) view.findViewById(R.id.button1);
+        TextView b2 = (TextView) view.findViewById(R.id.button2);
+        final NumberPicker np = (NumberPicker) view.findViewById(R.id.numberPicker4);
         np.setMaxValue(2);
         np.setMinValue(0);
-        final String[] buArr = new String[]{"24 Hours", "48 Hours", "7 days"};
+        final String[] buArr = new String[]{"24 Hours", "48 Hours", "7 days   "};
         np.setDisplayedValues(buArr);
         np.setWrapSelectorWheel(false);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 bloodUrgency.setText(buArr[np.getValue()]);
-                d.dismiss();
+                dialog.dismiss();
             }
         });
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                d.dismiss();
+                dialog.dismiss();
             }
         });
-        d.show();
+        dialog.show();
     }
 
 }
