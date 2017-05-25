@@ -1,7 +1,5 @@
 package com.cdev.raktdaan.Fragments;
 
-import android.app.AlertDialog;
-import android.app.Dialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.IdRes;
@@ -27,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -45,6 +44,7 @@ public class MakeARequestFragment extends Fragment {
     private DatabaseReference mDatabaseReference;
     private boolean nameNotEmpty,ageNotEmpty;
     private String emailUser;
+    private ArrayList<ArrayListDetail> arrayList;
 
     private String radioText= "Male";
 
@@ -76,6 +76,7 @@ public class MakeARequestFragment extends Fragment {
         radioButton2 = (RadioButton)view.findViewById(R.id.rb2);
         button.setEnabled(false);
         button.setBackgroundColor(Color.DKGRAY);
+
 
 
         name.addTextChangedListener(new TextWatcher() {
@@ -174,10 +175,13 @@ public class MakeARequestFragment extends Fragment {
 
                 String keyTo = mDatabaseReference.child("Requests").child(emailUser).push().getKey();
 
+                arrayList = new ArrayList<>();
+                arrayList.add(new ArrayListDetail("A","1","a"));
+
                 RequestDetail dataToSend = new RequestDetail(name.getText().toString().trim(),
                         age.getText().toString().trim(),radioText,bloodGroup.getText().toString(),
                         bloodUnit.getText().toString(),bloodUrgency.getText().toString(),
-                        sdf.format(resultdate),emailUser,keyTo,"");
+                        sdf.format(resultdate),emailUser,keyTo,arrayList);
 
                 mDatabaseReference.child("Requests").child(emailUser).child(keyTo).push().setValue(dataToSend);
 

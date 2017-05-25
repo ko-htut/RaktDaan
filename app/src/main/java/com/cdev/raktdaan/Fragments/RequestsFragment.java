@@ -44,6 +44,8 @@ public class RequestsFragment extends Fragment {
     private FirebaseDatabase mFirebaseDatabase;
     private DatabaseReference mDatabaseReference;
     private DatabaseReference getmDatabaseReference2;
+
+
     public RequestsFragment() {
         // Required empty public constructor
     }
@@ -138,7 +140,6 @@ public class RequestsFragment extends Fragment {
                 intent.putExtra("time",toSend.getTime());
                 intent.putExtra("email",toSend.getEmail());
                 intent.putExtra("key",toSend.getKey());
-                intent.putExtra("accepted",toSend.getAccepted());
                 intent.putExtra("urgency",toSend.getUrgency());
                 startActivity(intent);
             }
