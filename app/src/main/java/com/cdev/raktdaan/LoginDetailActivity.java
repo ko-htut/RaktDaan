@@ -1,5 +1,6 @@
 package com.cdev.raktdaan;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -8,10 +9,14 @@ import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
@@ -25,13 +30,17 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.math.BigInteger;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class LoginDetailActivity extends AppCompatActivity {
 
     public static final int GO_LOGIN_TO_HOME = 4;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private Toolbar toolbar;
-
     private String EmailUser;
     private String gender = "Male";
 
@@ -45,6 +54,7 @@ public class LoginDetailActivity extends AppCompatActivity {
     private EditText etDOB;
     private EditText etMobileNumber;
     private EditText etAddress;
+    private Button proceedBtn;
     SharedPreferences pref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,8 +64,6 @@ public class LoginDetailActivity extends AppCompatActivity {
         //BackEnd
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference();
-
-
 
         mFirebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mFirebaseAuth.getCurrentUser();
@@ -74,6 +82,7 @@ public class LoginDetailActivity extends AppCompatActivity {
             }
         });
 
+        //activity elements goes here
         bloodGroup = (TextView) findViewById(R.id.textView_bloodGroup);
         mRadioGroup = (RadioGroup) findViewById(R.id.radioGroup_gender);
         radioButton1 = (RadioButton) findViewById(R.id.radioButton_male);
@@ -81,7 +90,11 @@ public class LoginDetailActivity extends AppCompatActivity {
         etDOB = (EditText) findViewById(R.id.etDOB);
         etMobileNumber = (EditText) findViewById(R.id.etMobileNumber);
         etAddress = (EditText) findViewById(R.id.etAddress);
+        proceedBtn = (Button) findViewById(R.id.btnProceed);
+        proceedBtn.setEnabled(false);
+        proceedBtn.setBackgroundColor(Color.GRAY);
 
+        //here go activity elements's onClick() eventListeners
         bloodGroup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +111,52 @@ public class LoginDetailActivity extends AppCompatActivity {
                 }
             }
         });
+
+        final Calendar myCalendar = Calendar.getInstance();
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+                etDOB.setText(sdf.format(myCalendar.getTime()));
+            }
+        };
+        etDOB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(LoginDetailActivity.this, date, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.getDatePicker().setMinDate(myCalendar.getTimeInMillis() - 3155693400000L);
+                datePickerDialog.getDatePicker().setMaxDate(myCalendar.getTimeInMillis());
+                datePickerDialog.show();
+            }
+        });
+        etDOB.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (s.equals("dd/mm/yyyy")) {
+                    proceedBtn.setEnabled(false);
+                    proceedBtn.setBackgroundColor(Color.DKGRAY);
+                } else {
+                    proceedBtn.setEnabled(true);
+                    proceedBtn.setBackgroundColor(Color.parseColor("#ef5350"));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
 
     }
 
@@ -137,8 +196,8 @@ public class LoginDetailActivity extends AppCompatActivity {
         }
     }
 
-    public void showBloodGroup() {
-
+    //showing dialog for choosing bloodGroup
+    private void showBloodGroup() {
         android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
         View view = LayoutInflater.from(this).inflate(R.layout.blood_group_dialog, null);
         builder.setView(view);
@@ -176,4 +235,5 @@ public class LoginDetailActivity extends AppCompatActivity {
         });
         dialog.show();
     }
+
 }
