@@ -60,6 +60,7 @@ public class RequestsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_requests, container, false);
         listView = (ListView) view.findViewById(R.id.requestListview);
 
+
         backupList = new ArrayList<>();
 
         Email = FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".","");
@@ -196,8 +197,13 @@ public class RequestsFragment extends Fragment {
                                         layoutGayab.setVisibility(View.GONE);
                                         listView.setVisibility(View.VISIBLE);
                                     }
-                                    allRequestAdapter = new AllRequestAdapter(getContext(), R.layout.requests_card, backupList2);
-                                    listView.setAdapter(allRequestAdapter);
+
+                                    try {
+                                        allRequestAdapter = new AllRequestAdapter(getContext(), R.layout.requests_card, backupList2);
+                                        listView.setAdapter(allRequestAdapter);
+                                    } catch (NullPointerException e) {
+
+                                    }
                                 }
                                 else{
                                     if(arr2.size()==0){
@@ -208,8 +214,13 @@ public class RequestsFragment extends Fragment {
                                         layoutGayab.setVisibility(View.GONE);
                                         listView.setVisibility(View.VISIBLE);
                                     }
-                                    allRequestAdapter = new AllRequestAdapter(getContext(), R.layout.requests_card, arr2);
-                                    listView.setAdapter(allRequestAdapter);
+                                    try {
+                                        allRequestAdapter = new AllRequestAdapter(getContext(), R.layout.requests_card, arr2);
+                                        listView.setAdapter(allRequestAdapter);
+                                    } catch (NullPointerException e) {
+
+                                    }
+
                                 }
                             }
 

@@ -131,9 +131,12 @@ public class MyRequestsFragment extends Fragment {
                         }
 
                         list = nayaArrayList;
-                        myRequestAdapter = new MyRequestAdapter(getContext(),R.layout.my_requests_card,nayaArrayList);
-
-                        listView.setAdapter(myRequestAdapter);
+                        try {
+                            myRequestAdapter = new MyRequestAdapter(getContext(), R.layout.my_requests_card, nayaArrayList);
+                            listView.setAdapter(myRequestAdapter);
+                        } catch (NullPointerException e) {
+                            
+                        }
                     }
 
 

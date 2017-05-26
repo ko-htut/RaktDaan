@@ -80,47 +80,53 @@ public class AcceptRequestActivity extends AppCompatActivity{
         databaseReference = mFirebaseDatabase.getReference().child("Requests").
                 child(userToAccept.getEmail()).child(userToAccept.getKey());
 
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                    childOfChild = data.getKey();
-                    userToAccept.setAccepted(data.getValue(RequestDetail.class).getAccepted());
 
-                    boolean alreadyAccepted = false;
-                    for(ArrayListDetail checker:userToAccept.getAccepted()){
-                        if(checker.getEmail().equals(myEmail)){
-                            alreadyAccepted = true;
-                            break;
+        if(userToAccept.getEmail().equals(myEmail)){
+            buttonAccept.setVisibility(View.GONE);
+        }
+        else {
+            databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot data : dataSnapshot.getChildren()) {
+                        childOfChild = data.getKey();
+                        userToAccept.setAccepted(data.getValue(RequestDetail.class).getAccepted());
+
+                        boolean alreadyAccepted = false;
+                        for (ArrayListDetail checker : userToAccept.getAccepted()) {
+                            if (checker.getEmail().equals(myEmail)) {
+                                alreadyAccepted = true;
+                                break;
+                            }
+                        }
+                        if (!alreadyAccepted) {
+                            mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot child : dataSnapshot.getChildren())
+                                        myDetail = child.getValue(UserDetail.class);
+
+                                    buttonAccept.setEnabled(true);
+                                    buttonAccept.setBackgroundColor(Color.parseColor("#009688"));
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+                        } else {
+                            buttonAccept.setText("REQUEST ALREADY ACCEPTED");
                         }
                     }
-                    if(!alreadyAccepted) {
-                        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot child : dataSnapshot.getChildren())
-                                    myDetail = child.getValue(UserDetail.class);
-                                buttonAccept.setEnabled(true);
-                                buttonAccept.setBackgroundColor(Color.parseColor("#009688"));
-                            }
-
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-
-                            }
-                        });
-                    }
-                    else{
-                        buttonAccept.setText("REQUEST ALREADY ACCEPTED");
-                    }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
 
         buttonAccept.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -2,6 +2,8 @@ package com.cdev.raktdaan.nonactivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,7 +39,24 @@ public class DonorsAdapter extends ArrayAdapter<ArrayListDetail> {
         ImageView messageButton = (ImageView) convertView.findViewById(R.id.imageview_message);
         ImageView callButton = (ImageView) convertView.findViewById(R.id.imageViewCall);
 
-        ArrayListDetail detail = getItem(position);
+        final ArrayListDetail detail = getItem(position);
+        callButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent callIntent = new Intent(Intent.ACTION_DIAL);
+                callIntent.setData(Uri.parse("tel:"+ detail.getMobileNumber()));
+                getContext().startActivity(callIntent);
+            }
+        });
+
+        messageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                getContext().startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("sms:"
+                        + detail.getMobileNumber())));
+            }
+        });
 
         donorName.setText(detail.getName());
         donorContactNo.setText(detail.getMobileNumber());
