@@ -44,6 +44,8 @@ public class AcceptRequestActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_accept_request);
 
+        setResult(0);
+
         tvBloodGroup = (TextView) findViewById(R.id.ac_bg);
         tvName = (TextView) findViewById(R.id.ac_name);
         tvBloodUnits = (TextView) findViewById(R.id.ac_bloodUnits);
@@ -138,6 +140,7 @@ public class AcceptRequestActivity extends AppCompatActivity{
                                 buttonAccept.setEnabled(false);
                                 buttonAccept.setBackgroundColor(Color.parseColor("#546E7A"));
                                 buttonAccept.setText("REQUEST ALREADY ACCEPTED");
+                                setResult(1);
                                 dialog.dismiss();
                             }
                         })

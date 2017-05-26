@@ -25,12 +25,12 @@
             android:id="@+id/noRequestFound"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/myRequestProgressBar"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="23dp"
             android:text="No Request found !"
             android:textSize="30sp"
-            android:visibility="gone" />
+            android:layout_alignTop="@+id/myRequestProgressBar"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:visibility="gone"/>
 
         <ProgressBar
             android:id="@+id/myRequestProgressBar"

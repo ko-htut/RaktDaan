@@ -31,7 +31,7 @@ import java.util.ArrayList;
 
 public class RequestsFragment extends Fragment {
 
-    AllRequestAdapter allRequestAdapter;
+    private AllRequestAdapter allRequestAdapter;
     private ProgressBar mProgressBar;
     private RelativeLayout layoutGayab;
     private TextView noPendingRequests;
@@ -52,6 +52,7 @@ public class RequestsFragment extends Fragment {
     }
 
 
+
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -65,6 +66,11 @@ public class RequestsFragment extends Fragment {
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mDatabaseReference = mFirebaseDatabase.getReference().child("Requests");
         getmDatabaseReference2 = FirebaseDatabase.getInstance().getReference().child("users").child(Email).child("Details");
+
+        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_barRequests);
+        layoutGayab = (RelativeLayout) view.findViewById(R.id.relativeGayabRequests);
+        noPendingRequests = (TextView) view.findViewById(R.id.noPendingrequests);
+
 
         getmDatabaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -109,10 +115,6 @@ public class RequestsFragment extends Fragment {
 
         });
 
-        mProgressBar = (ProgressBar) view.findViewById(R.id.progress_barRequests);
-        layoutGayab = (RelativeLayout) view.findViewById(R.id.relativeGayabRequests);
-        noPendingRequests = (TextView) view.findViewById(R.id.noPendingrequests);
-
 
         LayoutInflater myinflater = getActivity().getLayoutInflater();
         ViewGroup myHeader = (ViewGroup)myinflater.inflate(R.layout.listview_header, listView, false);
@@ -142,7 +144,7 @@ public class RequestsFragment extends Fragment {
                 intent.putExtra("email",toSend.getEmail());
                 intent.putExtra("key",toSend.getKey());
                 intent.putExtra("urgency",toSend.getUrgency());
-                startActivity(intent);
+                startActivityForResult(intent,500);
             }
         });
 
@@ -163,4 +165,69 @@ public class RequestsFragment extends Fragment {
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==500){
+                final ArrayList<RequestDetail> arr2 = new ArrayList<>();
+                final ArrayList<RequestDetail> backupList2 = new ArrayList<>();
+                getmDatabaseReference2.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for(DataSnapshot user:dataSnapshot.getChildren()) {
+                                    for(DataSnapshot child:user.getChildren()) {
+                                        for(DataSnapshot next:child.getChildren()) {
+                                            if (next.getValue(RequestDetail.class).getBloodGroup().equals(myDetail.getBloodGroup()))
+                                                arr2.add(next.getValue(RequestDetail.class));
+                                            backupList2.add(next.getValue(RequestDetail.class));
+                                        }
+                                    }
+                                }
+
+                                if (requestsSwitch.isChecked()) {
+                                    if(backupList2.size()==0){
+                                        mProgressBar.setVisibility(View.GONE);
+                                        noPendingRequests.setVisibility(View.VISIBLE);
+                                    }
+                                    else{
+                                        layoutGayab.setVisibility(View.GONE);
+                                        listView.setVisibility(View.VISIBLE);
+                                    }
+                                    allRequestAdapter = new AllRequestAdapter(getContext(), R.layout.requests_card, backupList2);
+                                    listView.setAdapter(allRequestAdapter);
+                                }
+                                else{
+                                    if(arr2.size()==0){
+                                        mProgressBar.setVisibility(View.GONE);
+                                        noPendingRequests.setVisibility(View.VISIBLE);
+                                    }
+                                    else{
+                                        layoutGayab.setVisibility(View.GONE);
+                                        listView.setVisibility(View.VISIBLE);
+                                    }
+                                    allRequestAdapter = new AllRequestAdapter(getContext(), R.layout.requests_card, arr2);
+                                    listView.setAdapter(allRequestAdapter);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+
+
+                });
+        }
+    }
 }

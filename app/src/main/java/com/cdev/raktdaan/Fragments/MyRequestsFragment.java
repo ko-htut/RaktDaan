@@ -1,16 +1,19 @@
 package com.cdev.raktdaan.Fragments;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.cdev.raktdaan.DonorsToMyRequestActivity;
 import com.cdev.raktdaan.R;
 import com.cdev.raktdaan.nonactivity.MyRequestAdapter;
 import com.cdev.raktdaan.nonactivity.RequestDetail;
@@ -34,7 +37,7 @@ public class MyRequestsFragment extends Fragment {
     private View view;
     private ListView listView;
     private MyRequestAdapter myRequestAdapter;
-    private ArrayList<RequestDetail> list;
+    static  public  ArrayList<RequestDetail> list;
     private String Email;
 
     private RelativeLayout layoutGayab;
@@ -47,7 +50,7 @@ public class MyRequestsFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         view = inflater.inflate(R.layout.fragment_my_requests, container, false);
@@ -65,6 +68,14 @@ public class MyRequestsFragment extends Fragment {
 
         list = new ArrayList<>();
         myRequestAdapter = new MyRequestAdapter(getContext(),R.layout.my_requests_card,list);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getContext(), DonorsToMyRequestActivity.class);
+                intent.putExtra("position", position);
+                startActivityForResult(intent, 501);
+            }
+        });
 
         mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -92,8 +103,46 @@ public class MyRequestsFragment extends Fragment {
         listView.setAdapter(myRequestAdapter);
 
 
-
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==501){
+                final ArrayList<RequestDetail> nayaArrayList = new ArrayList<>();
+                mDatabaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for(DataSnapshot user:dataSnapshot.getChildren()) {
+                            for(DataSnapshot next:user.getChildren())
+                                nayaArrayList.add(next.getValue(RequestDetail.class));
+
+                        }
+                        if(nayaArrayList.size()==0){
+                            myRequestProgressBar.setVisibility(View.GONE);
+                            listView.setVisibility(View.GONE);
+                            layoutGayab.setVisibility(View.VISIBLE);
+                            noRequestFound.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            layoutGayab.setVisibility(View.GONE);
+                            listView.setVisibility(View.VISIBLE);
+                        }
+
+                        list = nayaArrayList;
+                        myRequestAdapter = new MyRequestAdapter(getContext(),R.layout.my_requests_card,nayaArrayList);
+
+                        listView.setAdapter(myRequestAdapter);
+                    }
+
+
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+    }
 }

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="10dp"
+            android:weightSum="1">
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/imageview_message"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_message" />
+
+            <LinearLayout
+                android:layout_marginLeft="25dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_weight="0.91">
+
+                <TextView
+                    android:id="@+id/donor_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kaluram Jat"
+                    android:textColor="#000"
+                    android:textSize="25sp"/>
+
+                <TextView
+                    android:textSize="20sp"
+                    android:id="@+id/donor_contactNo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="9988776655" />
+            </LinearLayout>
+
+            <ImageView
+                android:layout_gravity="center_vertical"
+                android:id="@+id/imageViewCall"
+                android:layout_marginRight="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@drawable/ic_call" />
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+</RelativeLayout>

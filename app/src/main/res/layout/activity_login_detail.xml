@@ -118,8 +118,16 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:ems="10"
-            android:hint="Mobile Number "
+            android:hint="Mobile Number (10 Digit)"
             android:inputType="phone" />
+
+        <TextView
+            android:id="@+id/wrong_mn"
+            android:layout_width="match_parent"
+            android:textColor="@color/tw__composer_red"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:text="* Invalid Number " />
 
         <EditText
             android:id="@+id/etAddress"

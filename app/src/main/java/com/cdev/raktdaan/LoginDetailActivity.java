@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.IdRes;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
@@ -14,14 +15,12 @@ import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cdev.raktdaan.nonactivity.UserDetail;
@@ -30,7 +29,6 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -55,6 +53,12 @@ public class LoginDetailActivity extends AppCompatActivity {
     private EditText etMobileNumber;
     private EditText etAddress;
     private Button proceedBtn;
+
+    private TextView WrongNumberTV;
+
+    private boolean DOBfound = false;
+    private boolean MobileNumberFound = false;
+    private boolean AddressFound = false;
     SharedPreferences pref;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,11 +92,12 @@ public class LoginDetailActivity extends AppCompatActivity {
         radioButton1 = (RadioButton) findViewById(R.id.radioButton_male);
         radioButton2 = (RadioButton) findViewById(R.id.radioButton_female);
         etDOB = (EditText) findViewById(R.id.etDOB);
+
+        WrongNumberTV = (TextView)findViewById(R.id.wrong_mn);
+
         etMobileNumber = (EditText) findViewById(R.id.etMobileNumber);
         etAddress = (EditText) findViewById(R.id.etAddress);
         proceedBtn = (Button) findViewById(R.id.btnProceed);
-        proceedBtn.setEnabled(false);
-        proceedBtn.setBackgroundColor(Color.GRAY);
 
         //here go activity elements's onClick() eventListeners
         bloodGroup.setOnClickListener(new View.OnClickListener() {
@@ -146,8 +151,7 @@ public class LoginDetailActivity extends AppCompatActivity {
                     proceedBtn.setEnabled(false);
                     proceedBtn.setBackgroundColor(Color.DKGRAY);
                 } else {
-                    proceedBtn.setEnabled(true);
-                    proceedBtn.setBackgroundColor(Color.parseColor("#ef5350"));
+                    DOBfound = true;
                 }
             }
 
@@ -156,6 +160,59 @@ public class LoginDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        etMobileNumber.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()!=0 && s.length()==10)
+                    MobileNumberFound = true;
+                else
+                    MobileNumberFound = false;
+                WrongNumberTV.setVisibility(View.GONE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+        });
+
+        etMobileNumber.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus && etMobileNumber.getText().toString().trim().length()!=10){
+                    WrongNumberTV.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
+        etAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if(s.length()!=0)
+                    AddressFound = true;
+                else
+                    AddressFound = false;
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+
+
+        });
+
+
 
 
     }
@@ -172,19 +229,26 @@ public class LoginDetailActivity extends AppCompatActivity {
     }
 
     public void onProceed(View view) {
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putBoolean("loginStatus", true);
-        editor.commit();
+
+        if(DOBfound && MobileNumberFound && AddressFound){
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("loginStatus", true);
+            editor.commit();
 
 //        //BE
-//        UserDetail newUser = new UserDetail(spinnerBloodGroup.getSelectedItem().toString()+spinnerRhFactor.getSelectedItem().toString(),
-//                spinnerGender.getSelectedItem().toString(),etDOB.getText().toString().trim(),
-//                etMobileNumber.getText().toString().trim(),etAddress.getText().toString().trim());
-//        mDatabaseReference.child("users").child(EmailUser).child("Details").push().setValue(newUser);
-//        mDatabaseReference.child("signedInUsers").child(EmailUser).push().setValue("1");
-        Intent intent = new Intent(LoginDetailActivity.this, HomeActivity.class);
-        startActivityForResult(intent, GO_LOGIN_TO_HOME);
+            UserDetail newUser = new UserDetail(bloodGroup.getText().toString().trim(),
+                    gender,etDOB.getText().toString().trim(),
+                    etMobileNumber.getText().toString().trim(),etAddress.getText().toString().trim());
+            mDatabaseReference.child("users").child(EmailUser).child("Details").push().setValue(newUser);
+            mDatabaseReference.child("signedInUsers").child(EmailUser).push().setValue("1");
+            Intent intent = new Intent(LoginDetailActivity.this, HomeActivity.class);
+            startActivityForResult(intent, GO_LOGIN_TO_HOME);
+        }
+        else{
+            Snackbar.make(view, "Fields cannot be empty!", Snackbar.LENGTH_LONG)
+                    .setAction("Action", null).show();
+        }
     }
 
     @Override
