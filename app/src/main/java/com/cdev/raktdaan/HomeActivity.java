@@ -82,7 +82,8 @@ public class HomeActivity extends AppCompatActivity
         tvNavEditProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(), "Open Login Detail Activity", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(HomeActivity.this, EditProfileActivity.class);
+                startActivity(intent);
             }
         });
     }
